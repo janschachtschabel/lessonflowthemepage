@@ -9,27 +9,27 @@ Generierung des Unterrichtsablaufs: Anhand von Eingaben wie Thema, Bildungsstufe
 Erstellung von Metadatenfiltern: Für jede Phase des Unterrichtsablaufs werden spezifische Metadatenfilter generiert, um passende Inhalte zuzuordnen.
 
 # Eingabeparameter
-breadcrumb: Hierarchische Themenstruktur (z.B. "Physik > Optik > Menschliches Auge")
+Breadcrumb: Hierarchische Themenstruktur (z.B. "Physik > Optik > Menschliches Auge")
 
-beschreibung: Detaillierte Beschreibung des Themas
+Beschreibung: Detaillierte Beschreibung des Themas
 
-bildungsstufe: Zielgruppe (z.B. "Sekundarstufe II")
+Bildungsstufe: Zielgruppe (z.B. "Sekundarstufe II")
 
-fach: Fachgebiet (z.B. "Physik")
+Fach: Fachgebiet (z.B. "Physik")
 
-sprache: Unterrichtssprache (z.B. "Deutsch")
+Sprache: Unterrichtssprache (z.B. "Deutsch")
 
 
 # Ausgabe
 Das Skript liefert einen JSON-formatierten Unterrichtsablauf mit folgenden Informationen:
 
-titel: Titel des Unterrichtsablaufs
+Titel: Titel des Unterrichtsablaufs
 
-beschreibung: Kurzbeschreibung des Ablaufs
+Beschreibung: Kurzbeschreibung des Ablaufs
 
-unterrichtsphasen: Liste der Phasen mit Titeln und Kurzbeschreibungen
+Unterrichtsphasen: Liste der Phasen mit Titeln und Kurzbeschreibungen
 
-anzahl_phasen: Gesamtzahl der Phasen
+Anzahl_phasen: Gesamtzahl der Phasen
 
 # Voraussetzungen
 Python 3.x
