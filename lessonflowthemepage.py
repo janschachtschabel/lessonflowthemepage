@@ -311,6 +311,20 @@ def normalize_inhaltstyp(inhaltstyp: str) -> str:
         "Interaktive Übung": "Interaktives Medium",
         "Präsentation": "Präsentation",
         "Modell_3D": "Modell / 3D",
+        "Diagramm": "Bild",  # Neue Zuordnung hinzugefügt
+        # Weitere Synonyme oder ähnliche Begriffe können hier hinzugefügt werden
+        "Arbeitsblatt": "Arbeitsblatt",
+        "Experiment": "Experiment",
+        "Lernspiel": "Lernspiel",
+        "Unterrichtsidee": "Unterrichtsidee",
+        "Methoden": "Methoden",
+        # Beispiel für weitere mögliche Synonyme:
+        "Video-Präsentation": "Video",
+        "Audioaufnahme": "Audio",
+        "Grafik": "Bild",
+        "Interaktives Spiel": "Interaktives Medium",
+        "Visualisierung": "Bild",
+        "Schülerarbeit": "Schülerarbeit",
         # Fügen Sie weitere Synonyme oder ähnliche Begriffe hinzu, falls notwendig
     }
     return mapping.get(inhaltstyp, inhaltstyp)  # Rückgabe des Originals, falls keine Übereinstimmung
@@ -324,7 +338,7 @@ def generate_unterrichtsablauf(breadcrumb: str, beschreibung: str, bildungsstufe
         "Die Herkunft der Informationen wird bei Bedarf transparent gemacht. Du orientierst dich an anerkannten didaktischen Prinzipien, lieferst praxisorientierte Erklärungen und vermeidest unnötige Komplexität.\n\n"
         "Neutralität und Objektivität stehen im Fokus. Persönliche Meinungen oder parteiische Bewertungen sind ausgeschlossen. Deine Inhalte werden regelmäßig überprüft, um den höchsten Qualitätsstandards zu genügen, unter anderem durch den Einsatz von LLM-gestützter Analyse. "
         "Dein Ziel ist es, sachliche, aktuelle und rechtlich wie didaktisch einwandfreie Informationen bereitzustellen.\n\n"
-        "Basierend auf den folgenden Informationen erstelle einen strukturierten Unterrichtsablauf für eine Unterrichtseinheit.\n\n"
+        "Basierend auf den folgenden Informationen erstelle einen strukturierten Unterrichtsablauf für eine Unterrichtseinheit, der einen geeigneten didaktischen Ansatz bzw. eine geeignete Unterrichtsmethode nutzt.\n\n"
         f"Breadcrumb-Menü: {breadcrumb}\n"
         f"Beschreibungstext: {beschreibung}\n"
         f"Bildungsstufe: {bildungsstufe}\n"
@@ -347,7 +361,7 @@ def generate_unterrichtsablauf(breadcrumb: str, beschreibung: str, bildungsstufe
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",  # Modellname korrigiert
+            model="gpt-4o-mini",  # Korrigierter Modellname
             messages=[
                 {"role": "system", "content": system_prompt}
             ],
@@ -404,13 +418,15 @@ def generate_phase_filter(unterrichtsablauf: Unterrichtsablauf, phase: Unterrich
         "Hintergrundinformationen:\n"
         f"Bildungsstufe: {bildungsstufe}\n"
         f"Fach: {fach}\n\n"
+        "Analysiere die Beschreibung der Phase und bestimme, ob der Schwerpunkt thematisch oder methodisch ist.\n"
         "Berücksichtige dabei die folgenden Kriterien:\n"
-        "- Thematisch fokussiert sich auf Inhalte und das spezifische Thema der Unterrichtseinheit (z.B. Informationsvermittlung, Erarbeitung).\n"
-        "- Methodisch bezieht sich auf die Art und Weise, wie der Unterricht durchgeführt und gestaltet wird, einschließlich der Interaktionsformen und didaktischen Ansätze (z.B. Motivation, Organisation der Gruppe, Reflexion, Differenzierung).\n"
-        "- Falls Elemente von beidem vorhanden sind, identifiziere, ob ein Aspekt überwiegt oder ob eine gleichwertige Mischung aus beiden vorliegt.\n\n"
-        "Schlage basierend auf dem Schwerpunkt des Abschnitts der Lehr- und Lernsituation (thematisch oder methodisch) den am besten geeigneten Inhaltstyp aus den vorgegebenen Optionen vor. "
-        "Verwende dabei unterschiedliche Inhaltstypen für verschiedene Phasen, um den spezifischen Anforderungen jeder Phase gerecht zu werden.\n\n"
-        "Beachte dabei, dass der 'inhaltstyp' immer eines der folgenden sein muss:\n"
+        "- **Thematisch:** Fokussiert sich auf Inhalte und das spezifische Thema der Unterrichtseinheit (z.B. Informationsvermittlung, Erarbeitung).\n"
+        "- **Methodisch:** Bezieht sich auf die Art und Weise, wie der Unterricht durchgeführt und gestaltet wird, einschließlich der Interaktionsformen und didaktischen Ansätze (z.B. Motivation, Organisation der Gruppe, Reflexion, Differenzierung).\n"
+        "- **Gemischt:** Falls Elemente von beidem vorhanden sind, identifiziere, ob ein Aspekt überwiegt oder ob eine gleichwertige Mischung aus beiden vorliegt.\n\n"
+        "Basierend auf dem ermittelten Schwerpunkt (thematisch oder methodisch) sowie den Vorgaben der Phase, schlage vor:\n"
+        "- **Suchbegriff:** Passe den Suchbegriff an, falls nötig.\n"
+        "- **Inhaltstyp:** Wähle einen geeigneten Inhaltstyp aus den vorgegebenen Optionen aus, um den spezifischen Anforderungen jeder Phase gerecht zu werden.\n\n"
+          "Beachte dabei, dass der 'inhaltstyp' immer eines der folgenden sein muss:\n"
         "- Bild\n"
         "- Video\n"
         "- Audio\n"
@@ -458,14 +474,12 @@ def generate_phase_filter(unterrichtsablauf: Unterrichtsablauf, phase: Unterrich
         "- Bildungsangebot\n"
         "- Event, Wettbewerb\n\n"
         "Stelle sicher, dass der 'inhaltstyp' immer in der Antwort enthalten ist und exakt einem der vorgegebenen Enum-Werte entspricht.\n\n"
-        "Beispiele zur Unterstützung:\n"
-        "- Einführung: Video eignet sich gut, um das Interesse zu wecken und das Thema vorzustellen.\n"
-        "- Erarbeitung: Arbeitsblatt hilft dabei, das erlernte Wissen zu vertiefen.\n"
-        "- Wissenskontrolle: Tests / Fragebögen sind ideal, um das Verständnis zu überprüfen.\n"
-        "- Experimentelle Phase: Experiment eignet sich, um praktische Anwendungen zu demonstrieren.\n"
-        "- Reflexion: Methoden sind geeignet, um die Schülerinnen und Schüler zur Reflexion anzuregen.\n"
-        "- Interaktive Übung: Lernspiel fördert das aktive Lernen und die Anwendung des Gelernten.\n"
-        "- Gruppenarbeit: Rollenspiel unterstützt die Zusammenarbeit und das Verständnis komplexer Konzepte.\n\n"
+        "Hier sind einige Beispiele zur Unterstützung:\n"
+        "- **Einführung (Thematisch):** Thema der Lernsituation als Suchbegriff, Inhaltstyp **Video** eignet sich gut, um das Interesse zu wecken und das Thema vorzustellen.\n"
+        "- **Gruppeneinteilung (Methodisch):** Suchbegriff **Gruppeneinteilung**, Inhaltstyp **Methoden** eignet sich zur Organisation der Gruppe.\n"
+        "- **Erarbeitung (Thematisch):** Thema der Lernsituation als Suchbegriff, Inhaltstyp **Arbeitsblatt** hilft dabei, das erlernte Wissen zu vertiefen.\n"
+        "- **Reflexion (Methodisch):** Suchbegriff **Reflexion**, Inhaltstyp **Methoden** geeignet, um die Schülerinnen und Schüler zur Reflexion anzuregen.\n"
+        "- **Lernspiel (Methodisch):** Suchbegriff **Lernspiel**, Inhaltstyp **Lernspiel** fördert das aktive Lernen und die Anwendung des Gelernten.\n\n"
         "Bitte geben Sie ausschließlich gültiges JSON zurück, ohne zusätzliche Erklärungen oder Kommentare:\n"
         "{\n"
         '  "thema": "Suchbegriff/Thema",\n'
@@ -477,7 +491,7 @@ def generate_phase_filter(unterrichtsablauf: Unterrichtsablauf, phase: Unterrich
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",  # Modellname korrigiert
+            model="gpt-4o-mini",  # Korrigierter Modellname
             messages=[
                 {"role": "system", "content": system_prompt}
             ],
@@ -518,12 +532,10 @@ def generate_phase_filter(unterrichtsablauf: Unterrichtsablauf, phase: Unterrich
             for error in ve.errors():
                 print(f"Fehlerfeld: {error['loc']}, Fehler: {error['msg']}, Typ: {error['type']}")
             # Falls ein Fehler auftritt, entfernen wir die fehlerhaften Felder und versuchen erneut zu parsen
+            # Dies ist ein fallback, aber idealerweise sollten alle Mappings abgedeckt sein
             if any(err['loc'] == ('inhaltstyp',) for err in ve.errors()):
-                del parsed_content['inhaltstyp']
-            if any(err['loc'] == ('fach',) for err in ve.errors()):
-                del parsed_content['fach']
-            if any(err['loc'] == ('bildungsstufe',) for err in ve.errors()):
-                del parsed_content['bildungsstufe']
+                print("Versuche, 'inhaltstyp' erneut zu normalisieren.")
+                parsed_content['inhaltstyp'] = normalize_inhaltstyp(parsed_content.get('inhaltstyp', ''))
             # Parst erneut
             ergebnis = KlassifikationErgebnisPhase.parse_obj(parsed_content)
 
