@@ -1,5 +1,6 @@
-# lessonflowthemepage
+# Lessonflow Themepage
 Dieses Python-Skript erstellt automatisch strukturierte Unterrichtsabläufe basierend auf Angaben einer Themenseite.
+Es ist keine vollständige Anwendung und dient nur Testzwecken.
 
 # Funktionsweise
 Das Skript arbeitet in zwei Hauptschritten:
